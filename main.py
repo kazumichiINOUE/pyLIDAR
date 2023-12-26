@@ -1,45 +1,77 @@
 import serial
 import time
+import math
+import sys
+import matplotlib.pyplot as plt
+from utils import *
 
-def remove_semicolon_followed_by_char(line):
-    # 改行を除去する
-    line = line.rstrip('\n')
-    # 「;」の位置を見つける
-    semicolon_index = line.find(';')
-    if semicolon_index != -1:
-        # 「;」の前の部分のみを抽出
-        return line[:semicolon_index]
-    return line
-
-def cmd_VV(ser_dev):
-    # VVコマンドを送信（デバイス情報を要求）
-    ser_dev.write(b'VV\n')
-    # 応答を読み取る
-    ret = []
-    for i in range(7):
-        response = ser_dev.read_until().decode('utf-8')
-        ret.append(remove_semicolon_followed_by_char(response))
-    if len(ret) > 0:
-        return True, ret
+try:
+    # 通信準備
+    device_file = '/dev/cu.usbmodem1101'
+    try:
+        ser = serial.Serial(device_file, 115200, timeout=1)
+    except serial.SerialException as e:
+        print(f"Connection error {e}", file=sys.stderr)
+        print("Bye")
+        sys.exit(0)
+    
+    time.sleep(2)
+    
+    # VVコマンドを送信し通信テスト
+    success, response = cmd_VV(ser)
+    if success == True:
+        print("[OK] VV")
+        #print(response, file=sys.stderr)
     else:
-        return False, ret
+        print("False", file=sys.stderr)
+    
+    time.sleep(1)
+    
+    # PPコマンドを送信し通信テスト
+    success, response = cmd_PP(ser)
+    if success == True:
+        print("[OK] PP")
+        #print(response, file=sys.stderr)
+    else:
+        print("False", file=sys.stderr)
+    
+    time.sleep(1)
+    
+    # IIコマンドを送信し通信テスト
+    success, response = cmd_II(ser)
+    if success == True:
+        print("[OK] II")
+        #print(response, file=sys.stderr)
+    else:
+        print("False", file=sys.stderr)
 
-# ここでデバイスファイル名をダミーで設定します（実際には適切なデバイスファイル名を使用してください）
-device_file = '/dev/cu.usbmodem1101'
-
-# シリアル接続の設定
-ser = serial.Serial(device_file, 115200, timeout=1)
-
-# センサーの初期化に少し時間がかかる場合があるので、少し待つ
-time.sleep(2)
-
-# VVコマンドを送信し通信テスト
-success, response = cmd_VV(ser)
-if success == True:
-    print(response)
-else:
-    print("False")
-
-# シリアル接続を閉じる
-ser.close()
+    print("Connect test all clear.")
+    
+    for i in range(100):
+        # MDコマンドを送信しone-shot計測
+        success, head, data = cmd_MD(ser)
+        if success == True:
+            urg_data = one_shot(data)
+            x = []
+            y = []
+            for d in urg_data:
+                angle = index2angle(d[0])
+                x.append(d[1] * math.cos(angle * math.pi/180))
+                y.append(d[1] * math.sin(angle * math.pi/180))
+            plt.clf()
+            plt.xlim(-6000, 6000)
+            plt.ylim(-6000, 6000)
+            plt.scatter(x, y, s=1)
+            plt.grid()
+            plt.draw()  # プロットを更新
+            plt.pause(0.001)  # 短時間待機
+            print(i, "data recieved")
+        else:
+            print("False", file=sys.stderr)
+    # シリアル接続を閉じる
+    ser.close()
+    
+except KeyboardInterrupt:
+    # シリアル接続を閉じる
+    ser.close()
 
