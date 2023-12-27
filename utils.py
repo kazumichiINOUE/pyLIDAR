@@ -51,7 +51,7 @@ def cmd_II(ser_dev):
         return False, ret
 
 def cmd_MD(ser_dev):
-    # PPコマンドを送信（デバイスパラメータ情報を要求）
+    # MDコマンドを送信（距離データの取得）
     ser_dev.write(b'MD0044072501101\n')
     # 応答を読み取る
     head = []
@@ -102,4 +102,3 @@ def one_shot(data):
         index = int(i/3)
         urg_data.append((index, r))
     return urg_data
-
