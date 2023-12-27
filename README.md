@@ -2,3 +2,8 @@
 ## 対応機器
 - URG-04LX-F01
 
+## 使い方
+```bash
+python ./main.py
+```
+
