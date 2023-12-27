@@ -1,3 +1,9 @@
+## 概要
+北陽電機製のURG（USB接続タイプ）からシリアル通信でデータ取得するPythonスクリプトです．
+最低限の機能だけを提供していますので，プログラムは解析しやすいと思います．
+ご活用ください．
+（まだ動作確認が完全でないので，お気づきの点はissueを上げていただけると助かります）
+
 ## 動作確認機器
 - [UBG-04LX-F01](https://www.hokuyo-aut.co.jp/search/single.php?serial=24&utm_source=google&utm_medium=cpc&utm_campaign=[P-MAX]&gad_source=1&gclid=Cj0KCQiAkKqsBhC3ARIsAEEjuJgjW_HZUi4gD8oWFw98hCq3jgN_M4oOZLgG4-RODck_B9eeZfWw2-QaAm4tEALw_wcB)（HOKUYO AUTOMATIC CO.,LTD.）
 
