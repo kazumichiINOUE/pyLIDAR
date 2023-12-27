@@ -38,7 +38,7 @@ def cmd_PP(ser_dev):
         return False, ret
 
 def cmd_II(ser_dev):
-    # PPコマンドを送信（デバイスパラメータ情報を要求）
+    # IIコマンドを送信（ステータス情報を要求）
     ser_dev.write(b'II\n')
     # 応答を読み取る
     ret = []
