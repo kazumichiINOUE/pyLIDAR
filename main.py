@@ -68,7 +68,7 @@ try:
             x = []
             y = []
             for d in urg_data:
-                angle = index2angle(d[0]) * math.pi/180
+                angle = deg2rad(index2angle(d[0]))
                 x.append(d[1] * math.cos(angle))
                 y.append(d[1] * math.sin(angle))
             plt.clf()
