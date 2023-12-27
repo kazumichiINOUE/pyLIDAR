@@ -9,6 +9,7 @@ def remove_semicolon_followed_by_char(line):
     return line
 
 def index2angle(index):
+    # 以下の数値はUBG-04LX-F01の設定値
     return (index + 44) * 360/1024 - 135.0
 
 def cmd_VV(ser_dev):
