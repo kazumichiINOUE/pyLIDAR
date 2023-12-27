@@ -61,10 +61,8 @@ try:
     
     count = 0
     while True:
-        # MDコマンドを送信しone-shot計測
-        success, head, data = cmd_MD(ser)
+        success, urg_data = one_shot(ser)
         if success == True:
-            urg_data = one_shot(data)
             x = []
             y = []
             for d in urg_data:
