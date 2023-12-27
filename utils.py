@@ -105,7 +105,7 @@ def one_shot(ser):
                 ch = ord(char) - 0x30
                 hex_ascii_value = hex(ch)
                 bin_val = bin(int(hex_ascii_value, 16)) 
-                # 2進数 '0b0' を6ビットの2進数に変換
+                # 2進数を6ビットの2進数に変換
                 binary.append(format(int(bin_val, 2), '06b'))
             combined_binary_24bit = ''.join(binary)
             r = int(combined_binary_24bit, 2)
