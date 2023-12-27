@@ -6,4 +6,7 @@
 ```bash
 python ./main.py
 ```
+停止は`Ctrl+c`です．
 
+## 注意
+- `utils.py`と`main.py`は同じディレクトリ下に置いてください
