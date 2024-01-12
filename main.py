@@ -1,11 +1,28 @@
-import serial
-import time
+"""
+This script interfaces with the URG series of laser rangefinders to visualize 
+the scanned data in real-time.
+
+Attributes:
+    XMIN (int): Minimum x-coordinate of the plot in millimeters.
+    XMAX (int): Maximum x-coordinate of the plot in millimeters.
+    YMIN (int): Minimum y-coordinate of the plot in millimeters.
+    YMAX (int): Maximum y-coordinate of the plot in millimeters.
+
+Note:
+    This script requires a URG series laser rangefinder connected to the system,
+    and the appropriate serial port must be specified when creating 
+    an instance of the `Urg` class.
+
+Example:
+    To run the script, ensure that the URG device is connected and specify the correct serial port:
+        $ python main.py
+"""
+
 import math
 import sys
 import matplotlib.pyplot as plt
-from utils import *
 from urg_class import Urg
-from common import *
+from common import DEBUG_MODE, index2angle, deg2rad
 
 XMIN = -3000 #[mm]
 XMAX =  3000 #[mm]
@@ -15,13 +32,14 @@ YMAX =  3000 #[mm]
 # ウィンドウサイズを固定する．お好みで調整
 plt.figure(figsize=(8, 8))
 
+print(f"DEBUG MODE -> {DEBUG_MODE}")
+
+urg = Urg('/dev/cu.usbmodem101', 115200)
 try:
-    urg = Urg('/dev/cu.usbmodem1101', 115200)
-    
     count = 0
     while True:
         success, urg_data = urg.one_shot()
-        if success == True:
+        if success is True:
             x = []
             y = []
             for d in urg_data:
@@ -39,13 +57,10 @@ try:
             count += 1
         else:
             print("False", file=sys.stderr)
-    # シリアル接続を閉じる
-    urg.close()
-    
+
 except KeyboardInterrupt:
     # Ctrl-Cの後処理
     print("Pressed Ctrl-C")
     # シリアル接続を閉じる
     urg.close()
     print("Bye")
-

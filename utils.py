@@ -1,5 +1,3 @@
-import math
-
 def remove_semicolon_followed_by_char(line):
     # 改行を除去する
     line = line.rstrip('\n')
@@ -15,39 +13,37 @@ def cmd_VV(ser_dev):
     ser_dev.write(b'VV\n')
     # 応答を読み取る
     ret = []
-    for i in range(8):
+    for _ in range(8):
         response = ser_dev.read_until().decode('utf-8')
         ret.append(remove_semicolon_followed_by_char(response))
     if len(ret) > 0:
         return True, ret
-    else:
-        return False, ret
+
+    return False, ret
 
 def cmd_PP(ser_dev):
     # PPコマンドを送信（デバイスパラメータ情報を要求）
     ser_dev.write(b'PP\n')
     # 応答を読み取る
     ret = []
-    for i in range(11):
+    for _ in range(11):
         response = ser_dev.read_until().decode('utf-8')
         ret.append(remove_semicolon_followed_by_char(response))
     if len(ret) > 0:
         return True, ret
-    else:
-        return False, ret
+    return False, ret
 
 def cmd_II(ser_dev):
     # IIコマンドを送信（ステータス情報を要求）
     ser_dev.write(b'II\n')
     # 応答を読み取る
     ret = []
-    for i in range(10):
+    for _ in range(10):
         response = ser_dev.read_until().decode('utf-8')
         ret.append(remove_semicolon_followed_by_char(response))
     if len(ret) > 0:
         return True, ret
-    else:
-        return False, ret
+    return False, ret
 
 def cmd_MD(ser_dev):
     # MDコマンドを送信（距離データの取得）
@@ -55,15 +51,13 @@ def cmd_MD(ser_dev):
     # 応答を読み取る
     head = []
     data = []
-    for i in range(6):
+    for _ in range(6):
         response = ser_dev.read_until().decode('utf-8')
         head.append(remove_semicolon_followed_by_char(response))
-    for i in range(33):
+    for _ in range(33):
         response = ser_dev.read_until().decode('utf-8')
         response = response.rstrip('\n')
         data.append(response)
     if len(head) > 0:
         return True, head, data
-    else:
-        return False, head
-
+    return False, head, []

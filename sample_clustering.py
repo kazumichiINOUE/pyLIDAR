@@ -1,5 +1,3 @@
-import serial
-import time
 import math
 import sys
 import matplotlib.pyplot as plt
@@ -15,9 +13,8 @@ YMAX =  3000 #[mm]
 # ウィンドウサイズを固定する．お好みで調整
 plt.figure(figsize=(8, 8))
 
+urg = Urg('/dev/cu.usbmodem1101', 115200)
 try:
-    urg = Urg('/dev/cu.usbmodem1101', 115200)
-    
     count = 0
     dth = 100
     while True:
@@ -56,8 +53,6 @@ try:
         plt.grid()
         plt.draw()  # プロットを更新
         plt.pause(0.001)  # 短時間待機
-    # シリアル接続を閉じる
-    urg.close()
     
 except KeyboardInterrupt:
     # Ctrl-Cの後処理

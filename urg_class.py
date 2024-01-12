@@ -1,10 +1,16 @@
-import serial
+"""
+Urg class
+"""
 import sys
 import time
-from utils import *
-from common import *
+import serial
+from utils import cmd_VV, cmd_PP, cmd_MD, cmd_II
+from common import DEBUG_MODE
 
 class Urg:
+    """
+    Urgクラスの定義
+    """
     def __init__(self, device_file, baurate):
         self.device_file = device_file
         self.baurate = baurate
@@ -19,31 +25,31 @@ class Urg:
 
         # VVコマンドを送信し通信テスト
         success, response = cmd_VV(self.ser)
-        if success == True:
+        if success is True:
             print("[OK] VV")
             if DEBUG_MODE:
                 print(response, file=sys.stderr)
         else:
             print("[False] VV", file=sys.stderr)
             sys.exit(0)
-    
+
         time.sleep(1)
-    
+
         # PPコマンドを送信し通信テスト
         success, response = cmd_PP(self.ser)
-        if success == True:
+        if success is True:
             print("[OK] PP")
             if DEBUG_MODE:
                 print(response, file=sys.stderr)
         else:
             print("[False] PP", file=sys.stderr)
             sys.exit(0)
-        
+
         time.sleep(1)
-        
+
         # IIコマンドを送信し通信テスト
         success, response = cmd_II(self.ser)
-        if success == True:
+        if success is True:
             print("[OK] II")
             if DEBUG_MODE:
                 print(response, file=sys.stderr)
@@ -55,14 +61,17 @@ class Urg:
         print("Connect test all clear.")
 
     def one_shot(self):
+        """
+        1回だけ計測する
+        """
         # MDコマンドを送信しone-shot計測
-        success, head, data = cmd_MD(self.ser)
+        success, _, data = cmd_MD(self.ser)
         urg_data = []
-        if success == True:
+        if success is True:
             data_strings = ""
             for p in data:
                 if len(p) > 0:
-                    check_sum = p[-1]
+                    # check_sum = p[-1]
                     body = p[:-1]
                     data_strings += body
             for i in range(0, len(data_strings), 3):
@@ -71,17 +80,23 @@ class Urg:
                 for char in three_chars:
                     ch = ord(char) - 0x30
                     hex_ascii_value = hex(ch)
-                    bin_val = bin(int(hex_ascii_value, 16)) 
+                    bin_val = bin(int(hex_ascii_value, 16))
                     # 2進数を6ビットの2進数に変換
                     binary.append(format(int(bin_val, 2), '06b'))
                 combined_binary_24bit = ''.join(binary)
-                r = int(combined_binary_24bit, 2)
-                index = int(i/3)
-                urg_data.append((index, r))
+                if all(c in '01' for c in combined_binary_24bit):
+                    r = int(combined_binary_24bit, 2)
+                    index = int(i/3)
+                    urg_data.append((index, r))
+                else:
+                    print("不正なデータが含まれています")
+                    self.close()
+                    sys.exit(0)
             return True, urg_data
-        else:
-            return False, urg_data
-    
-    def close(self):
-        self.ser.close()
+        return False, urg_data
 
+    def close(self):
+        """
+        close serial port
+        """
+        self.ser.close()

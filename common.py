@@ -1,4 +1,4 @@
-import math
+from math import pi
 
 DEBUG_MODE = False
 
@@ -7,5 +7,4 @@ def index2angle(index):
     return (index + 44) * 360/1024 - 135.0
 
 def deg2rad(deg):
-    return deg * math.pi/180.0
-
+    return deg * pi/180.0
