@@ -5,10 +5,10 @@ from utils import *
 from urg_class import Urg
 from common import *
 
-XMIN = -3000 #[mm]
-XMAX =  3000 #[mm]
-YMIN = -3000 #[mm]
-YMAX =  3000 #[mm]
+XMIN = -5000 #[mm]
+XMAX =  5000 #[mm]
+YMIN = -5000 #[mm]
+YMAX =  5000 #[mm]
 
 # ウィンドウサイズを固定する．お好みで調整
 plt.figure(figsize=(8, 8))
