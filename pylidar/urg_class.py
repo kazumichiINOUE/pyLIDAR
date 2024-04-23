@@ -4,8 +4,8 @@ Urg class
 import sys
 import time
 import serial
-from utils import cmd_VV, cmd_PP, cmd_MD, cmd_II
-from common import DEBUG_MODE
+from .utils import cmd_VV, cmd_PP, cmd_MD, cmd_II
+from .common import DEBUG_MODE
 
 class Urg:
     """

@@ -21,8 +21,8 @@ Example:
 import math
 import sys
 import matplotlib.pyplot as plt
-from urg_class import Urg
-from common import DEBUG_MODE, index2angle, deg2rad
+from pylidar.urg_class import Urg
+from pylidar.common import DEBUG_MODE, index2angle, deg2rad
 
 XMIN = -2000 #[mm]
 XMAX =  2000 #[mm]
