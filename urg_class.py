@@ -86,12 +86,13 @@ class Urg:
                 combined_binary_24bit = ''.join(binary)
                 if all(c in '01' for c in combined_binary_24bit):
                     r = int(combined_binary_24bit, 2)
-                    index = int(i/3)
+                    index = int(i/3.0)
                     urg_data.append((index, r))
                 else:
                     print("不正なデータが含まれています")
                     self.close()
                     sys.exit(0)
+            print()
             return True, urg_data
         return False, urg_data
 

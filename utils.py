@@ -47,14 +47,16 @@ def cmd_II(ser_dev):
 
 def cmd_MD(ser_dev):
     # MDコマンドを送信（距離データの取得）
-    ser_dev.write(b'MD0044072501101\n')
+    ser_dev.write(b'MD0000108001101\n')
+    #ser_dev.write(b'MD0044072501101\n') # for Classic URG
     # 応答を読み取る
     head = []
     data = []
     for _ in range(6):
         response = ser_dev.read_until().decode('utf-8')
         head.append(remove_semicolon_followed_by_char(response))
-    for _ in range(33):
+    LOOP_NUM_FOR_READ = 52  # Classic URGでは33
+    for _ in range(LOOP_NUM_FOR_READ):
         response = ser_dev.read_until().decode('utf-8')
         response = response.rstrip('\n')
         data.append(response)
