@@ -14,6 +14,10 @@ conda install kazumichiinoue::pylidar
 ```
 
 ## 使い方
+サンプルコードが`sample/main.py` にあります．
+```
+cd sample
+```
 URGとPCをUSB接続してください．続いて，接続されたデバイスファイル名を確認し，`main.py`の設定を修正してください（データ計測の仕方もmain.pyが参考になります）．
 ```python
 # 通信準備
